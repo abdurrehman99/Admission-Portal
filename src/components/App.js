@@ -1,10 +1,8 @@
-import React from 'react';
-import { Login, Signup } from './Auth';
+import React from "react";
+import { Login, Signup } from "./Auth";
 
 function App() {
-  return (
-    <Signup />
-  );
+	return <Login />;
 }
 
 export default App;

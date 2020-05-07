@@ -67,7 +67,7 @@ function Signup() {
 	const classes = useStyles();
 	return (
 		<Container component="main" maxWidth="xs">
-			{/* <CssBaseline /> */}
+			<CssBaseline />
 			<div className={classes.paper}>
 				<Avatar className="mb-3">
 					<LockOutlinedIcon />

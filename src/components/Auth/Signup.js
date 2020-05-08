@@ -12,14 +12,14 @@ import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
+import Switch from "@material-ui/core/Switch";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import MaskedInput from "react-text-mask";
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -41,6 +41,67 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
+const cnicMask = (props) => {
+	const { inputRef, ...other } = props;
+	return (
+		<MaskedInput
+			{...other}
+			ref={(ref) => {
+				inputRef(ref ? ref.inputElement : null);
+			}}
+			guide={false}
+			mask={[
+				/[0-9]/,
+				/[0-9]/,
+				/[0-9]/,
+				/[0-9]/,
+				/[0-9]/,
+				" ",
+				"-",
+				" ",
+				/[0-9]/,
+				/[0-9]/,
+				/[0-9]/,
+				/[0-9]/,
+				/[0-9]/,
+				/[0-9]/,
+				/[0-9]/,
+				" ",
+				"-",
+				" ",
+				/[0-9]/,
+			]}
+			placeholderChar={"\u2000"}
+			showMask
+		/>
+	);
+};
+const phoneMask = (props) => {
+	const { inputRef, ...other } = props;
+	return (
+		<MaskedInput
+			{...other}
+			ref={(ref) => {
+				inputRef(ref ? ref.inputElement : null);
+			}}
+			guide={false}
+			mask={[
+				/[0-9]/,
+				/[0-9]/,
+				/[0-9]/,
+				/[0-9]/,
+				/[0-9]/,
+				/[0-9]/,
+				/[0-9]/,
+				/[0-9]/,
+				/[0-9]/,
+			]}
+			placeholderChar={"\u2000"}
+			showMask
+		/>
+	);
+};
+
 function Signup() {
 	const [values, setValues] = useState({
 		amount: "",
@@ -49,9 +110,6 @@ function Signup() {
 		weightRange: "",
 		showPassword: false,
 	});
-	function NumberFormatCustom(props) {
-		const { inputRef, onChange, ...other } = props;
-	}
 
 	const handleChange = (prop) => (event) => {
 		setValues({ ...values, [prop]: event.target.value });
@@ -95,12 +153,14 @@ function Signup() {
 						<Grid item xs={12}>
 							<TextField
 								label="CNIC"
+								name="CNIC"
 								variant="outlined"
 								size="small"
 								fullWidth
-								inputProps={{
-									maxLength: 13,
+								InputProps={{
+									inputComponent: cnicMask,
 								}}
+								onChange={(e) => console.log(e.target.value)}
 								helperText=""
 							/>
 						</Grid>
@@ -111,14 +171,11 @@ function Signup() {
 								id="outlined-start-adornment"
 								size="small"
 								fullWidth
-								inputProps={{
-									maxLength: 10,
-								}}
-								className={clsx(classes.margin, classes.textField)}
 								InputProps={{
 									startAdornment: (
-										<InputAdornment position="start">+92</InputAdornment>
+										<InputAdornment position="start">03</InputAdornment>
 									),
+									inputComponent: phoneMask,
 								}}
 							/>
 						</Grid>
@@ -200,7 +257,7 @@ function Signup() {
 						</Grid>
 						<Grid item xs={12}>
 							<FormControlLabel
-								control={<Checkbox value="allowExtraEmails" color="primary" />}
+								control={<Switch value="allowExtraEmails" color="primary" />}
 								label="I accept Terms & Conditions"
 							/>
 						</Grid>

@@ -12,7 +12,7 @@ import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
+import Switch from "@material-ui/core/Switch";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -20,6 +20,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import MaskedInput from "react-text-mask";
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -40,6 +41,41 @@ const useStyles = makeStyles((theme) => ({
 		margin: theme.spacing(3, 0, 2),
 	},
 }));
+const cnicMask = (props) => {
+	const { inputRef, ...other } = props;
+	return (
+		<MaskedInput
+			{...other}
+			ref={(ref) => {
+				inputRef(ref ? ref.inputElement : null);
+			}}
+			guide={false}
+			mask={[
+				/[0-9]/,
+				/[0-9]/,
+				/[0-9]/,
+				/[0-9]/,
+				/[0-9]/,
+				" ",
+				"-",
+				" ",
+				/[0-9]/,
+				/[0-9]/,
+				/[0-9]/,
+				/[0-9]/,
+				/[0-9]/,
+				/[0-9]/,
+				/[0-9]/,
+				" ",
+				"-",
+				" ",
+				/[0-9]/,
+			]}
+			placeholderChar={"\u2000"}
+			showMask
+		/>
+	);
+};
 
 function Login() {
 	const [values, setValues] = useState({
@@ -49,9 +85,6 @@ function Login() {
 		weightRange: "",
 		showPassword: false,
 	});
-	function NumberFormatCustom(props) {
-		const { inputRef, onChange, ...other } = props;
-	}
 
 	const handleChange = (prop) => (event) => {
 		setValues({ ...values, [prop]: event.target.value });
@@ -80,12 +113,14 @@ function Login() {
 						<Grid item xs={12}>
 							<TextField
 								label="CNIC"
+								name="CNIC"
 								variant="outlined"
 								size="small"
 								fullWidth
-								inputProps={{
-									maxLength: 13,
+								InputProps={{
+									inputComponent: cnicMask,
 								}}
+								onChange={(e) => console.log(e.target.value)}
 								helperText=""
 							/>
 						</Grid>
@@ -127,20 +162,9 @@ function Login() {
 								/>
 							</FormControl>
 						</Grid>
-						<Grid item xs>
-							<Link href="#" variant="body2">
-								Forgot password?
-							</Link>
-						</Grid>
-						<Grid item>
-							<FormControlLabel
-								control={<Checkbox value="allowExtraEmails" color="primary" />}
-								label="Remember Me"
-							/>
-						</Grid>
 						<Grid item xs={12}>
 							<FormControlLabel
-								control={<Checkbox value="allowExtraEmails" color="primary" />}
+								control={<Switch value="Remember Me" color="primary" />}
 								label="Remember Me"
 							/>
 						</Grid>
@@ -154,6 +178,18 @@ function Login() {
 					>
 						Sign Up
 					</Button>
+					<Grid container>
+						<Grid item xs>
+							<Link href="#" variant="body2">
+								Forgot password?
+							</Link>
+						</Grid>
+						<Grid item>
+							<Link href="#" variant="body2">
+								{"Don't have an account? Sign Up"}
+							</Link>
+						</Grid>
+					</Grid>
 				</form>
 			</div>
 		</Container>
